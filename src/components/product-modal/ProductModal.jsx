@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect } from 'react'
 
 const maskVariants = {
     hidden: {
@@ -21,6 +22,23 @@ const contentVariants = {
 
 export default function ProductModal({ product, open, setOpen  }) {
     if (!product) return null
+
+    // This effect handles the Escape key to close the modal
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setOpen(false)
+            }
+        }
+
+        if (open) {
+            window.addEventListener('keydown', handleKeyDown)
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [open, setOpen])
 
     return (
         <AnimatePresence>
